@@ -19,8 +19,11 @@
  *   getStringLength(null) => 0
  *   getStringLength(undefined) => 0
  */
-function getStringLength(/* value */) {
-  throw new Error('Not implemented');
+function getStringLength(value) {
+  if (value == null || undefined) {
+    return 0;
+  }
+  return value.length;
 }
 
 /**
@@ -37,8 +40,11 @@ function getStringLength(/* value */) {
  *   isString('test') => true
  *   isString(new String('test')) => true
  */
-function isString(/* value */) {
-  throw new Error('Not implemented');
+function isString(value) {
+  if (typeof value === 'string' || value instanceof String) {
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -53,8 +59,8 @@ function isString(/* value */) {
  *   concatenateStrings('aa', '') => 'aa'.
  *   concatenateStrings('', 'bb') => 'bb'
  */
-function concatenateStrings(/* value1, value2 */) {
-  throw new Error('Not implemented');
+function concatenateStrings(value1, value2) {
+  return value1.concat(value2);
 }
 
 /**
@@ -68,8 +74,8 @@ function concatenateStrings(/* value1, value2 */) {
  *   getFirstChar('cat') => 'c'
  *   getFirstChar('') => ''
  */
-function getFirstChar(/* value */) {
-  throw new Error('Not implemented');
+function getFirstChar(value) {
+  return value.charAt(0);
 }
 
 /**
@@ -83,8 +89,8 @@ function getFirstChar(/* value */) {
  *   removeLeadingAndTrailingWhitespaces('cat ') => 'cat'
  *   removeLeadingAndTrailingWhitespaces('\t\t\tHello, World! ') => 'Hello, World!'
  */
-function removeLeadingAndTrailingWhitespaces(/* value */) {
-  throw new Error('Not implemented');
+function removeLeadingAndTrailingWhitespaces(value) {
+  return value.trim();
 }
 
 /**
@@ -146,8 +152,14 @@ function repeatString(/* str, times */) {
  *   removeFirstOccurrences('I like legends', 'end') => 'I like legs'.
  *   removeFirstOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
-function removeFirstOccurrences(/* str, value */) {
-  throw new Error('Not implemented');
+function removeFirstOccurrences(str, value) {
+  const index = str.indexOf(value);
+
+  if (index !== -1) {
+    return str.slice(0, index) + str.slice(index + value.length);
+  }
+
+  return str;
 }
 
 /**
@@ -162,8 +174,14 @@ function removeFirstOccurrences(/* str, value */) {
  *   removeLastOccurrences('I like legends', 'end') => 'I like legs'.
  *   removeLastOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
-function removeLastOccurrences(/* str, value */) {
-  throw new Error('Not implemented');
+function removeLastOccurrences(str, value) {
+  const index = str.lastIndexOf(value);
+
+  if (index !== -1) {
+    return str.slice(0, index) + str.slice(index + value.length);
+  }
+
+  return str;
 }
 
 /**
@@ -396,8 +414,8 @@ function extractNameFromTemplate(/* value */) {
  *   unbracketTag('<span>') => 'span'
  *   unbracketTag('<a>') => 'a'
  */
-function unbracketTag(/* str */) {
-  throw new Error('Not implemented');
+function unbracketTag(str) {
+  return str.replace('<', '').replace('>', '');
 }
 
 /**
@@ -415,8 +433,8 @@ function unbracketTag(/* str */) {
  *   ],
  *   'info@gmail.com' => ['info@gmail.com']
  */
-function extractEmails(/* str */) {
-  throw new Error('Not implemented');
+function extractEmails(str) {
+  return str.split(';');
 }
 
 /**
@@ -435,8 +453,26 @@ function extractEmails(/* str */) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  return str
+    .split('')
+    .map((symbol) => {
+      const charCode = symbol.charCodeAt(0);
+      const translateCharCode =
+        charCode + (symbol.toLowerCase() < 'n' ? 13 : -13);
+      switch (symbol) {
+        case ' ':
+          return ' ';
+        case '?':
+          return '?';
+        case '!':
+          return '!';
+        default:
+          break;
+      }
+      return String.fromCharCode(translateCharCode);
+    })
+    .join('');
 }
 
 /**
@@ -463,8 +499,63 @@ function encodeToRot13(/* str */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const cardDesk = [
+    'A♣',
+    '2♣',
+    '3♣',
+    '4♣',
+    '5♣',
+    '6♣',
+    '7♣',
+    '8♣',
+    '9♣',
+    '10♣',
+    'J♣',
+    'Q♣',
+    'K♣',
+    'A♦',
+    '2♦',
+    '3♦',
+    '4♦',
+    '5♦',
+    '6♦',
+    '7♦',
+    '8♦',
+    '9♦',
+    '10♦',
+    'J♦',
+    'Q♦',
+    'K♦',
+    'A♥',
+    '2♥',
+    '3♥',
+    '4♥',
+    '5♥',
+    '6♥',
+    '7♥',
+    '8♥',
+    '9♥',
+    '10♥',
+    'J♥',
+    'Q♥',
+    'K♥',
+    'A♠',
+    '2♠',
+    '3♠',
+    '4♠',
+    '5♠',
+    '6♠',
+    '7♠',
+    '8♠',
+    '9♠',
+    '10♠',
+    'J♠',
+    'Q♠',
+    'K♠',
+  ];
+
+  return cardDesk.indexOf(value);
 }
 
 module.exports = {
